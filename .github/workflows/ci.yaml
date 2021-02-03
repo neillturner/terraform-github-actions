@@ -1,0 +1,156 @@
+---
+name: "GitHub Actions Example"
+
+"on":
+  pull_request:
+  push: { branches: [main] }
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: terraform
+      TF_WORKSPACE: my-workspace
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-1
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.14.4
+
+      - name: Terraform Fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform init
+        id: init
+        run: terraform init
+        working-directory: ${{ env.working-directory }}
+        env:
+          TF_CLI_ARGS_init: "-backend-config=role_arn=arn:aws:iam::99999999:role/my-github-actions-role -upgrade -reconfigure"
+          TF_VAR_assume_role: "my-github-actions-role"
+
+      - name: tfsec
+        uses: reviewdog/action-tfsec@master
+        with:
+          reporter: github-pr-review      # Change reporter
+          fail_on_error: "true"           # Fail action if errors are found
+          filter_mode: "nofilter"         # Check all files, not just the diff
+          github_token: ${{ secrets.GITHUB_TOKEN }}         
+
+      - name: Terraform validate
+        id: validate
+        run: terraform validate
+
+      - name: Terraform plan
+        id: plan
+        run: terraform plan -no-color
+        working-directory: ${{ env.working-directory }}
+        env:
+          TF_VAR_assume_role: "my-github-actions-role"
+
+      - name: Plan output
+        id: output
+        uses: actions/github-script@v3
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            ### Workspace
+
+            \`${process.env.TF_WORKSPACE}\`
+
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            <details><summary>Show Plan</summary>
+
+            \`\`\`hcl
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            **Pusher**: @${{ github.actor }}
+            **Action**: ${{ github.event_name }}
+            `;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Terraform apply
+        id: apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
+        working-directory: ${{ env.working-directory }}
+        env:
+          TF_VAR_assume_role: "my-github-actions-role"
+
+      - name: Install InSpec
+        uses: actionshub/chef-install@main
+        with:
+          channel: current
+          project: inspec
+
+      - name: Assume Role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::88888888888888:role/my-github-actions-role
+          role-duration-seconds: 600
+          role-skip-session-tagging: true          
+
+      - name: Infrastructure Tests
+        id: inspec
+        run: inspec exec profile/example --reporter=cli:- progress:inspec.log --input-file=profile/example/attributes-example.yml -t aws://
+        env:
+          CHEF_LICENSE: accept
+
+      - name: Infrastructure Test Results 
+        id: inspec_results
+        if: always()
+        run: | 
+          REPORT="$(cat inspec.log)"
+          REPORT="${REPORT//'%'/'%25'}"
+          REPORT="${REPORT//$'\n'/'%0A'}"
+          REPORT="${REPORT//$'\r'/'%0D'}"
+          echo "::set-output name=loginspec::$REPORT"
+
+      - name: Infrastructure tests Output
+        if: always()      
+        uses: actions/github-script@v3
+        env:
+          INSPEC: "Inspec Test Results \n${{ steps.inspec_results.outputs.loginspec }}"
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const output = `#### Inspec Tests 🖌\`${{ steps.inspec.outcome }}\`
+
+            <details><summary>Show Test Results</summary>
+
+            \`\`\`
+
+            ${process.env.INSPEC}
+            \`\`\`
+           
+            </details>
+
+            `;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })

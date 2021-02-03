@@ -1,0 +1,15 @@
+---
+name: Example
+title: Example
+maintainer: Analytical Platform
+copyright: None
+copyright_email: None
+license: Apache 2
+summary: An InSpec Compliance Profile Example
+version: 0.1.0
+inspec_version: '> 4.18.97'
+supports:
+  - platform: aws
+depends:
+  - name: inspec-aws
+    url: https://github.com/inspec/inspec-aws/archive/v1.33.0.zip          
