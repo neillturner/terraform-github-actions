@@ -37,15 +37,15 @@ This project has a number of issues that are known to fail tfsec checks.
 
 ## References 
 
-[Continuous Integration with GitHub Actions and Terraform](https://wahlnetwork.com/2020/05/12/continuous-integration-with-github-actions-and-terraform/)
-[WahlNetwork/github-action-terraform](https://github.com/WahlNetwork/github-action-terraform)
-[Automate Terraform with GitHub Actions](https://learn.hashicorp.com/tutorials/terraform/github-actions)
-[Automated Terraform Deployments to AWS with Github Actions](https://medium.com/@dnorth98/automated-terraform-deployments-to-aws-with-github-actions-c590c065c179)
+- [Continuous Integration with GitHub Actions and Terraform](https://wahlnetwork.com/2020/05/12/continuous-integration-with-github-actions-and-terraform/)
+- [WahlNetwork/github-action-terraform](https://github.com/WahlNetwork/github-action-terraform)
+- [Automate Terraform with GitHub Actions](https://learn.hashicorp.com/tutorials/terraform/github-actions)
+- [Automated Terraform Deployments to AWS with Github Actions](https://medium.com/@dnorth98/automated-terraform-deployments-to-aws-with-github-actions-c590c065c179)
 
-[tfsec-example-project](https://github.com/tfsec/tfsec-example-project)
-[tfsec](https://github.com/tfsec/tfsec)
-[action-tfsec](https://github.com/reviewdog/action-tfsec)
-[Running tfsec as a Github Action](https://www.owenrumney.co.uk/running-tfsec-as-a-github-action/)
+- [tfsec-example-project](https://github.com/tfsec/tfsec-example-project)
+- [tfsec](https://github.com/tfsec/tfsec)
+- [action-tfsec](https://github.com/reviewdog/action-tfsec)
+- [Running tfsec as a Github Action](https://www.owenrumney.co.uk/running-tfsec-as-a-github-action/)
 
-[inspec-aws](https://github.com/inspec/inspec-aws)
-[InSpec Resources Reference](https://docs.chef.io/inspec/resources/)
+- [inspec-aws](https://github.com/inspec/inspec-aws)
+- [InSpec Resources Reference](https://docs.chef.io/inspec/resources/)
