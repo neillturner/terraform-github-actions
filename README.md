@@ -42,10 +42,9 @@ This project has a number of issues that are known to fail tfsec checks.
 - [Automate Terraform with GitHub Actions](https://learn.hashicorp.com/tutorials/terraform/github-actions)
 - [Automated Terraform Deployments to AWS with Github Actions](https://medium.com/@dnorth98/automated-terraform-deployments-to-aws-with-github-actions-c590c065c179)
 
-- [tfsec-example-project](https://github.com/tfsec/tfsec-example-project)
-- [tfsec](https://github.com/tfsec/tfsec)
-- [action-tfsec](https://github.com/reviewdog/action-tfsec)
-- [Running tfsec as a Github Action](https://www.owenrumney.co.uk/running-tfsec-as-a-github-action/)
+- [Terrascan Documentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/)
+- [terrascan-action](https://github.com/accurics/terrascan-action)
+- [Terrascan GitHub Action: Easy Policy as Code for IaC Pipelines](https://www.accurics.com/blog/devops-blog/terrascan-github-action-policy-as-code-for-iac-pipelines/)
 
 - [inspec-aws](https://github.com/inspec/inspec-aws)
 - [InSpec Resources Reference](https://docs.chef.io/inspec/resources/)
