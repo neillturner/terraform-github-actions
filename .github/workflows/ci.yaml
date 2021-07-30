@@ -19,6 +19,22 @@ jobs:
 
       - name: Check out code
         uses: actions/checkout@v2
+        
+      - name: Run Terrascan
+        id: terrascan
+        uses: accurics/terrascan-action@main
+        with:
+          iac_type: 'terraform'
+          iac_version: 'v14'
+          policy_type: 'aws'
+          only_warn: true
+          iac_dir: infrastructure
+        #sarif_upload: true
+        #non_recursive:
+        #iac_dir:
+        #policy_path:
+        #skip_rules:
+        #config_path:
 
       - uses: hashicorp/setup-terraform@v1
         with:
