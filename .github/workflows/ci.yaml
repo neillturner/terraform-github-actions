@@ -53,14 +53,6 @@ jobs:
           TF_CLI_ARGS_init: "-backend-config=role_arn=arn:aws:iam::99999999:role/my-github-actions-role -upgrade -reconfigure"
           TF_VAR_assume_role: "my-github-actions-role"
 
-      - name: tfsec
-        uses: reviewdog/action-tfsec@master
-        with:
-          reporter: github-pr-review      # Change reporter
-          fail_on_error: "true"           # Fail action if errors are found
-          filter_mode: "nofilter"         # Check all files, not just the diff
-          github_token: ${{ secrets.GITHUB_TOKEN }}         
-
       - name: Terraform validate
         id: validate
         run: terraform validate
