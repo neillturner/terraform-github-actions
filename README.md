@@ -2,7 +2,7 @@
 terraform aws github action workflow example with tests
 
 Contains an example workflow for terraform and github actions incorporating:
-- tfsec for security scanning before running terraform  
+- terrascan for security scanning before running terraform  
 - inspec for testing after running terraform 
 
 This provides a simple terraform workflow that includes tests. 
