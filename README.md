@@ -1,4 +1,5 @@
 # terraform-github-actions
+Author: Pritesh Chandaliya
 terraform aws github action workflow example with tests
 
 Contains an example workflow for terraform and github actions incorporating:
